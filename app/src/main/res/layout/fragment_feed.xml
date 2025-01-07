@@ -31,4 +31,5 @@
         android:src="@android:drawable/star_big_on"
         app:layout_constraintBottom_toBottomOf="@+id/feedRecyclerView"
         app:layout_constraintEnd_toEndOf="@+id/feedRecyclerView" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
