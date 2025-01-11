@@ -41,6 +41,12 @@ class UserFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.signInButton.setOnClickListener{ signIn(it) }
         binding.signUpButton.setOnClickListener{ signUp(it) }
+
+        val currentUser = auth.currentUser
+        if(currentUser != null) {
+            val action = UserFragmentDirections.actionUserFragmentToFeedFragment()
+            Navigation.findNavController(view).navigate(action)
+        }
     }
 
     fun signUp(view: View) {
@@ -63,7 +69,18 @@ class UserFragment : Fragment() {
     }
 
     fun signIn(view: View) {
-        println("Sign In Clicked")
+
+        val email = binding.emailText.text.toString()
+        val password = binding.passwordText.text.toString()
+
+        if(email.isNotEmpty() && password.isNotEmpty()) {
+            auth.signInWithEmailAndPassword(email,password).addOnSuccessListener {
+                val action = UserFragmentDirections.actionUserFragmentToFeedFragment()
+                Navigation.findNavController(view).navigate(action)
+            }.addOnFailureListener { exception ->
+                Toast.makeText(requireContext(),exception.localizedMessage,Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     override fun onDestroyView() {

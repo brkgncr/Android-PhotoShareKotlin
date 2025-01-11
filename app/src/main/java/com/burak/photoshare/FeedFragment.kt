@@ -9,19 +9,23 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.navigation.Navigation
 import com.burak.photoshare.databinding.FragmentFeedBinding
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 
 class FeedFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private var _binding: FragmentFeedBinding? = null
     private val binding get() = _binding!!
+    private lateinit var auth : FirebaseAuth
 
     private lateinit var popup : PopupMenu
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        auth = Firebase.auth
     }
 
     override fun onCreateView(
@@ -57,6 +61,7 @@ class FeedFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             val action = FeedFragmentDirections.actionFeedFragmentToUploadFragment()
             Navigation.findNavController(requireView()).navigate(action)
         } else if(item?.itemId == R.id.logoutItem) {
+            auth.signOut()
             val action = FeedFragmentDirections.actionFeedFragmentToUserFragment()
             Navigation.findNavController(requireView()).navigate(action)
         }
