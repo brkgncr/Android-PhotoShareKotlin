@@ -21,6 +21,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.burak.photoshare.databinding.FragmentUploadBinding
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.storage
 
 
 class UploadFragment : Fragment() {
@@ -33,10 +38,17 @@ class UploadFragment : Fragment() {
     var selectedImage: Uri? = null
     var selectedBitmap: Bitmap? = null
 
+    private lateinit var auth: FirebaseAuth
+    private lateinit var storage: FirebaseStorage
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         registerLaunchers()
+
+        auth = Firebase.auth
+        storage = Firebase.storage
 
     }
 
@@ -56,6 +68,17 @@ class UploadFragment : Fragment() {
     }
 
     fun uploadClick(view: View) {
+        val reference = storage.reference
+        // file path
+        val imageReference = reference.child("images").child("image.jpg")
+        if(selectedImage != null) {
+            imageReference.putFile(selectedImage!!).addOnSuccessListener { uploadTask ->
+                // url retrieval process
+
+            }.addOnFailureListener { exception ->
+                Toast.makeText(requireContext(),exception.localizedMessage,Toast.LENGTH_LONG).show()
+            }
+        }
 
     }
 
