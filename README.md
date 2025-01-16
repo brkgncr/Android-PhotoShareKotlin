@@ -33,7 +33,25 @@ PhotoShare is a photo-sharing application designed for the Android platform usin
 
 ---
 
-## Technologies Used
+## **MVVM Architecture**
+
+The application follows the **Model-View-ViewModel (MVVM)** architecture to ensure a scalable, testable, and maintainable structure.
+
+### **Components of MVVM:**
+- **Model**: Responsible for managing the data, including fetching, storing, and processing it.
+- **ViewModel**: Handles the logic for preparing data to be displayed. It interacts with the Model and exposes data in a format suitable for the UI. The ViewModel also manages UI-related state and communicates with the View.
+- **View**: The UI layer (Activity/Fragment) that displays the data to the user. It observes the ViewModel and updates the UI when the data changes.
+
+### **Benefits of Using MVVM:**
+- **Separation of concerns**: Makes the codebase cleaner and more modular.
+- **Testability**: ViewModels are easier to test since they contain the logic and don't directly depend on the UI.
+- **Reactivity**: The UI layer automatically updates when data changes in the ViewModel.
+
+This structure improves maintainability and scalability of the app, especially as features grow.
+
+---
+
+## **Technologies Used**
 
 - **Programming Language**: Kotlin
 - **Frameworks and Libraries**:
@@ -43,6 +61,7 @@ PhotoShare is a photo-sharing application designed for the Android platform usin
   - Picasso (for image loading)
   - Android Navigation Component
   - Material Design Components
+- **Architecture**: Model-View-ViewModel (MVVM)
 - **Build System**: Gradle
 
 ---
