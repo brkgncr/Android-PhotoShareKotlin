@@ -1,4 +1,4 @@
-package com.burak.photoshare
+package com.burak.photoshare.view
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
@@ -19,13 +19,18 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.navigation.Navigation
 import com.burak.photoshare.databinding.FragmentUploadBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.storage
+import java.util.UUID
 
 
 class UploadFragment : Fragment() {
@@ -40,6 +45,7 @@ class UploadFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var storage: FirebaseStorage
+    private lateinit var db: FirebaseFirestore
 
 
 
@@ -49,6 +55,7 @@ class UploadFragment : Fragment() {
 
         auth = Firebase.auth
         storage = Firebase.storage
+        db = Firebase.firestore
 
     }
 
@@ -68,18 +75,41 @@ class UploadFragment : Fragment() {
     }
 
     fun uploadClick(view: View) {
+        val uuid = UUID.randomUUID()
+        val imageName = "${uuid}.jpg"
         val reference = storage.reference
         // file path
-        val imageReference = reference.child("images").child("image.jpg")
-        if(selectedImage != null) {
+        val imageReference = reference.child("images").child(imageName)
+        if (selectedImage != null) {
             imageReference.putFile(selectedImage!!).addOnSuccessListener { uploadTask ->
                 // url retrieval process
+                imageReference.downloadUrl.addOnSuccessListener { uri ->
+                    if(auth.currentUser != null) {
+                        val downloadUrl = uri.toString()
+                        // save database
+                        val postMap = hashMapOf<String, Any>()
+                        postMap.put("downloadUrl", downloadUrl)
+                        postMap.put("email", auth.currentUser!!.email.toString())
+                        postMap.put("comment", binding.commentText.text.toString())
+                        postMap.put("date", Timestamp.now())
 
-            }.addOnFailureListener { exception ->
-                Toast.makeText(requireContext(),exception.localizedMessage,Toast.LENGTH_LONG).show()
+                        db.collection("Posts").add(postMap).addOnSuccessListener { documentReference ->
+                            // upload Database
+                            val action = UploadFragmentDirections.actionUploadFragmentToFeedFragment()
+                            Navigation.findNavController(view).navigate(action)
+                        }.addOnFailureListener { exception ->
+                            Toast.makeText(requireContext(),exception.localizedMessage,Toast.LENGTH_LONG).show()
+                        }
+                    }
+
+
+                }.addOnFailureListener { exception ->
+                    Toast.makeText(requireContext(), exception.localizedMessage, Toast.LENGTH_LONG)
+                        .show()
+                }
             }
-        }
 
+        }
     }
 
     fun chooseImage(view: View) {

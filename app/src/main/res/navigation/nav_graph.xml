@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/userFragment"
-        android:name="com.burak.photoshare.UserFragment"
+        android:name="com.burak.photoshare.view.UserFragment"
         android:label="fragment_user"
         tools:layout="@layout/fragment_user" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/feedFragment"
-        android:name="com.burak.photoshare.FeedFragment"
+        android:name="com.burak.photoshare.view.FeedFragment"
         android:label="fragment_feed"
         tools:layout="@layout/fragment_feed" >
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/uploadFragment"
-        android:name="com.burak.photoshare.UploadFragment"
+        android:name="com.burak.photoshare.view.UploadFragment"
         android:label="fragment_upload"
         tools:layout="@layout/fragment_upload" >
         <action
