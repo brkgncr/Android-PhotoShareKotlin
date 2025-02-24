@@ -1,4 +1,4 @@
-# PhotoShare - Android Application
+# Photo Share - Android Application
 
 PhotoShare is a photo-sharing application designed for the Android platform using Kotlin. This app allows users to create an account, log in, and share photos with comments, creating an engaging feed experience for all users.
 
